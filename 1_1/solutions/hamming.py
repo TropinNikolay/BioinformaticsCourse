@@ -10,5 +10,5 @@ def hamming_dist(seq_1, seq_2):
 
 
 if __name__ == '__main__':
-    first_seq, second_sec = [seq.seq for seq in SeqIO.parse('data/gattaca.fasta', 'fasta')]
+    first_seq, second_sec = [seq.seq for seq in SeqIO.parse('../data/gattaca.fasta', 'fasta')]
     print(hamming_dist(first_seq, second_sec))

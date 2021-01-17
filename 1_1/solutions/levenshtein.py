@@ -22,6 +22,6 @@ def levenshtein_dist(seq_1, seq_2):
 
 
 if __name__ == '__main__':
-    first_seq, second_sec = [seq.seq for seq in SeqIO.parse('data/f8.fasta', 'fasta')]
+    first_seq, second_sec = [seq.seq for seq in SeqIO.parse('../data/f8.fasta', 'fasta')]
     print(levenshtein_dist(first_seq, second_sec))
     print(distance.levenshtein(first_seq, second_sec))
