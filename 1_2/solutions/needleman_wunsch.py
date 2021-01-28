@@ -1,7 +1,3 @@
-from Bio.SubsMat import MatrixInfo as matlist
-from Bio import pairwise2
-
-
 def needleman_wunsch(a, b, matrix, gap_penalty):
     n = len(a)
     m = len(b)
@@ -14,12 +10,7 @@ def needleman_wunsch(a, b, matrix, gap_penalty):
 
     for i in range(1, m + 1):
         for j in range(1, n + 1):
-            try:
-                s = matrix[(a[j - 1], b[i - 1])]
-            except KeyError:
-                s = matrix[(b[i - 1], a[j - 1])]
-
-            match = score[i - 1][j - 1] + s
+            match = score[i - 1][j - 1] + matrix[(a[j - 1], b[i - 1])]
             delete = score[i - 1][j] + gap_penalty
             insert = score[i][j - 1] + gap_penalty
             score[i][j] = max(match, delete, insert)
@@ -34,12 +25,7 @@ def needleman_wunsch(a, b, matrix, gap_penalty):
         score_up = score[i][j - 1]
         score_left = score[i - 1][j]
 
-        try:
-            s = matrix[(a[j - 1], b[i - 1])]
-        except KeyError:
-            s = matrix[(b[i - 1], a[j - 1])]
-
-        if score_current == score_diagonal + s:
+        if score_current == score_diagonal + matrix[(a[j - 1], b[i - 1])]:
             alignment_a += a[j - 1]
             alignment_b += b[i - 1]
             i -= 1
@@ -65,19 +51,3 @@ def needleman_wunsch(a, b, matrix, gap_penalty):
     alignment_a = alignment_a[::-1]
     alignment_b = alignment_b[::-1]
     return alignment_a, alignment_b, score[m][n]
-
-
-if __name__ == '__main__':
-    seq_1 = "GATTACA"
-    seq_2 = "ACTGACTG"
-
-    matrix = matlist.blosum62
-
-    align_1, align_2, score = needleman_wunsch(seq_1, seq_2, matrix, gap_penalty=-1)
-    print(score, align_1, align_2, sep="\n")
-
-    alignments = pairwise2.align.globalds(seq_1, seq_2, matrix, -1, 0)
-    for alignment in alignments:
-        if alignment.seqA == align_1 and alignment.seqB == align_2 and alignment.score == score:
-            print("Выравнивание выполнено успешно!")
-            break
