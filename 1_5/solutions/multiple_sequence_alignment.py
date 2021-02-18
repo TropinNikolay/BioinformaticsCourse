@@ -23,8 +23,9 @@ def get_argmax(distance_matrix):
     return ind
 
 
-def get_pair_alignment():
-    pass
+def get_pair_alignment(consensus, best_score_seq, matrix, gap_penalty):
+    alignment_1, alignment_2, score = nw(consensus, best_score_seq, matrix, gap_penalty)
+    return alignment_1, alignment_2
 
 
 def main():
