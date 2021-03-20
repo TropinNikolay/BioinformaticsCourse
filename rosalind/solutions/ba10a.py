@@ -6,7 +6,6 @@ with open("../data/rosalind_ba10a.txt") as data:
             sequence = line
         elif ind == 2:
             states = line.split()
-            number_of_states = len(states)
         elif ind >= 5:
             probabilities = line.split()
             letter = probabilities.pop(0)
