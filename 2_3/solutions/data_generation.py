@@ -5,7 +5,7 @@ def generate_DNA():
     alphabet = "ATGC"
     dna_length = 1000
 
-    with open("DNA.txt", "w") as data:
+    with open("../data_input/DNA.txt", "w") as data:
         dna = ''.join(random.choices(alphabet, k=dna_length))
         data.write(dna)
     return dna
@@ -15,7 +15,7 @@ def generate_reads(dna):
     reads_length = 150
     quality = chr(126) * reads_length  # максимальное качество
 
-    with open("READS.fastq", "a") as fastq:
+    with open("../data_input/READS.fastq", "w") as fastq:
         for i in range(len(dna) - reads_length + 1):
             read = dna[i: i + reads_length]
             fastq.write(f"@{i}\n{read}\n+\n{quality}\n")

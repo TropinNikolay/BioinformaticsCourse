@@ -1,0 +1,35 @@
+digraph {
+	TTC
+	TTC -> TCT [label=TTCT]
+	TCT
+	ATT
+	ATT -> TTC [label=ATTC]
+	GAT
+	GAT -> ATT [label=GATT]
+	TGA
+	TGA -> GAT [label=TGAT]
+	ATG
+	ATG -> TGA [label=ATGA]
+	ATG -> TGG [label=ATGG]
+	TAT
+	TAT -> ATG [label=TATG]
+	CTA
+	CTA -> TAT [label=CTAT]
+	CCT
+	CCT -> CTA [label=CCTA]
+	GCC
+	GCC -> CCT [label=GCCT]
+	GCC -> CCG [label=GCCG]
+	CGC
+	CGC -> GCC [label=CGCC]
+	CCG
+	CCG -> CGC [label=CCGC]
+	GGC
+	GGC -> GCC [label=GGCC]
+	TGG
+	TGG -> GGC [label=TGGC]
+	AAT
+	AAT -> ATG [label=AATG]
+	TAA
+	TAA -> AAT [label=TAAT]
+}
