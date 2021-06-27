@@ -2,6 +2,8 @@ import networkx as nx
 from Bio import SeqIO
 from graphviz import Digraph
 import os
+import numpy as np
+import matplotlib.pyplot as plt
 
 os.environ["PATH"] += os.pathsep + r'C:\Program Files\Graphviz\bin'
 
@@ -61,16 +63,71 @@ def compress_graph(G):
     return G
 
 
-def delete_bubles(G):
-    pass
+def get_tail_nodes(G):
+    tail_nodes = []
+    for node in list(G.nodes):
+        in_edges = list(G.in_edges(node))
+        out_edges = list(G.out_edges(node))
+        if len(in_edges) == 1 and len(out_edges) == 0:
+            tail_nodes.append(node)
+    return tail_nodes
 
 
-def delete_tails(G):
-    pass
+def get_tail_distribution(G, tails):
+    tails_distribution = []
+    for node in tails:
+        in_edge = list(G.in_edges(node, data=True))
+        edge_length = len(in_edge[0][2]["substring"])
+        edge_coverage = in_edge[0][2]["coverage"]
+        tails_distribution.append((edge_length * edge_coverage, node))
+    tails_distribution.sort()
+    return tails_distribution
 
 
-def save_graph_stats(G):
-    pass
+def delete_tails(G, *, threshold):
+    tail_nodes = get_tail_nodes(G)
+    tails_distribution = get_tail_distribution(G, tail_nodes)
+    ind = np.ceil(threshold * len(tails_distribution)).astype(int)
+    for _, node in tails_distribution[:ind]:
+        G.remove_node(node)
+    return G
+
+
+def delete_bubles(G, *, buble_length):
+    return G
+
+
+def save_graph_stats(G, out_dir):
+    with open(os.path.join(out_dir, "Stats.txt"), "w") as stat:
+        stat.write(f"Number of nodes: {G.number_of_nodes()}\n")
+        stat.write(f"Number of edges: {G.number_of_edges()}\n")
+
+    coverage = []
+    for from_v, to_v, data in G.edges(data=True):
+        coverage.append(data["coverage"])
+
+    plt.hist(coverage, range=[0, max(coverage) + 1])
+    plt.title("Coverage distribution")
+    plt.savefig(os.path.join(out_dir, "Coverage_distribution.png"))
+    plt.close()
+
+    in_degree = []
+    for node, in_deg in G.in_degree:
+        in_degree.append(in_deg)
+
+    plt.hist(in_degree)
+    plt.title("Degree in")
+    plt.savefig(os.path.join(out_dir, "Degree_in.png"))
+    plt.close()
+
+    out_degree = []
+    for node, out_deg in G.out_degree:
+        out_degree.append(out_deg)
+
+    plt.hist(out_degree)
+    plt.title("Degree out")
+    plt.savefig(os.path.join(out_dir, "Degree_out.png"))
+    plt.close()
 
 
 def vizualize(G, filename):
@@ -84,26 +141,27 @@ def vizualize(G, filename):
 
 def test_assembly(G):
     assemble = "".join([str(edge[2]["substring"]) for edge in list(G.edges(data=True))])
-    with open("../data_input/DNA.txt", "r") as dna:
+    with open("../data_input/DNA/DNA.txt", "r") as dna:
         dna = dna.readline()
     return "Success!" if dna == assemble else "Assembled incorrectly"
 
 
 def main():
-    # k = int(sys.argv[0])
-
-    k = 50
+    k = 50  # для работы с большой ДНК, для DNA_small k = 4
     edges = count_edge_coverage(k)
 
     graph = create_graph(edges, k)
-    vizualize(graph, "../data_output/graph")
-    # save_graph_stats(graph)
+    vizualize(graph, "../data_output/DNA/original/graph")
+    save_graph_stats(graph, "../data_output/DNA/original")
 
     graph = compress_graph(graph)
-    vizualize(graph, "../data_output/compressed_graph")
-    # save_graph_stats(graph)
+    vizualize(graph, "../data_output/DNA/compressed/compressed_graph")
+    save_graph_stats(graph, "../data_output/DNA/compressed")
 
-    print(test_assembly(graph))
+    # print(test_assembly(graph))  # для проверки большой ДНК
+
+    graph = delete_tails(graph, threshold=0.3)
+    save_graph_stats(graph, "../data_output/DNA/without_tails")
 
 
 if __name__ == '__main__':
