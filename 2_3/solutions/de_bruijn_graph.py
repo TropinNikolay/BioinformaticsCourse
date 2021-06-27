@@ -10,7 +10,7 @@ os.environ["PATH"] += os.pathsep + r'C:\Program Files\Graphviz\bin'
 
 def count_edge_coverage(kmer_length):
     edges = {}
-    for record in SeqIO.parse("../data_input/READS.fastq", "fastq"):
+    for record in SeqIO.parse("../data_input/DNA_big/READS_big.fastq", "fastq"):
         read = record.seq
         for i in range(len(read) - kmer_length + 1):
             edge = read[i: i + kmer_length]
@@ -147,21 +147,19 @@ def test_assembly(G):
 
 
 def main():
-    k = 50  # для работы с большой ДНК, для DNA_small k = 4
+    k = 50
     edges = count_edge_coverage(k)
 
     graph = create_graph(edges, k)
-    vizualize(graph, "../data_output/DNA/original/graph")
-    save_graph_stats(graph, "../data_output/DNA/original")
+    # vizualize(graph, "../data_output/DNA_big/original/graph")
+    save_graph_stats(graph, "../data_output/DNA_big/original")
 
     graph = compress_graph(graph)
-    vizualize(graph, "../data_output/DNA/compressed/compressed_graph")
-    save_graph_stats(graph, "../data_output/DNA/compressed")
-
-    # print(test_assembly(graph))  # для проверки большой ДНК
+    # vizualize(graph, "../data_output/DNA_big/compressed/compressed_graph")
+    save_graph_stats(graph, "../data_output/DNA_big/compressed")
 
     graph = delete_tails(graph, threshold=0.3)
-    save_graph_stats(graph, "../data_output/DNA/without_tails")
+    save_graph_stats(graph, "../data_output/DNA_big/without_tails")
 
 
 if __name__ == '__main__':
