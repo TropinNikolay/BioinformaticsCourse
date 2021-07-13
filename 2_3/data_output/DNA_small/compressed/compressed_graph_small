@@ -1,0 +1,11 @@
+digraph {
+	TCT
+	ATG
+	ATG -> TCT [label=ATGATTCT]
+	ATG -> GCC [label=ATGGCC]
+	GCC
+	GCC -> ATG [label=GCCTATG]
+	GCC -> GCC [label=GCCGCC]
+	TAA
+	TAA -> ATG [label=TAATG]
+}
