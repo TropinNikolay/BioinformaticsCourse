@@ -1,0 +1,26 @@
+INFO:
+     AAA  AAT  ATT  TTA  TTT
+AAA -inf  2.0  1.0 -inf -inf
+AAT -inf -inf  2.0  1.0  1.0
+ATT -inf -inf -inf  2.0  2.0
+TTA  1.0  1.0  1.0 -inf -inf
+TTT -inf -inf -inf  2.0 -inf
+
+INFO:
+      ATT  TTA  TTT  AAAT
+ATT  -inf  2.0  2.0  -inf
+TTA   1.0 -inf -inf   1.0
+TTT  -inf  2.0 -inf  -inf
+AAAT  2.0  1.0  1.0  -inf
+
+INFO:
+      TTT  AAAT  ATTA
+TTT  -inf  -inf  -inf
+AAAT  1.0  -inf   2.0
+ATTA -inf   1.0  -inf
+
+INFO:
+        TTT  AAATTA
+TTT    -inf    -inf
+AAATTA -inf    -inf
+
